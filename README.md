@@ -1,2 +1,2 @@
-# Chess-Game
-Chess Game Multiplayer Using HTML/CSS/JAVASCRIPT 
+## A chess game written in HTML, CSS and JavaScript
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta type="http-equiv" content="charset: utf-8">
+	<meta name="author" content="Yaroslav Shestakov">
+	<title>Game</title>
+	<style type="text/css">
+		#field { margin-left: 30% ; margin-top: 2% ; }
+		#grid.rotate, #grid.rotate td div { 
+			transform:rotate(180deg);
+			-ms-transform:rotate(180deg); /* IE 9 */
+			-moz-transform:rotate(180deg); /* Firefox */
+			-webkit-transform:rotate(180deg); /* Safari and Chrome */
+			-o-transform:rotate(180deg);
+		}
+		#grid { border-collapse: collapse ; table-layout: fixed ;} 
+		
+		#controls { float: left ; }
+		#controls div { position: relative ; margin-top: 10% ; }
+		#rules {} 
+		#create { }
+		
+		#stats {  table-layout:fixed; word-wrap:break-word; width: 300px ;} 
+		#stats *{ border: 1px black solid ; }
+		#stats td {  width: 160px ;}
+		#stats td.loss { height: 200px ; font-size: 40px ; vertical-align: top ; background-color: gray ; word-wrap:break-word}
+		#stats td.loss.white { color: white ;}
+		#stats td.hasTurn { color: blue ; text-align: center ; height: 25px ;}
+		#stats td.timeline  { text-align: center ; height: 50px ; } 
+		#stats td.timeline textarea  { width: 95% ; height: 95% ; rows: 5 ; } 
+		
+		#grid td.square {	 
+			width: 70px ; 
+			height: 70px ; 
+			border: 1px solid black ; 
+			opacity: 1 ; 
+			border-collapse: collapse ; 
+			overflow-x: auto ;
+		}
+		
+		#grid td.square.black { background-image: url('assets/black.jpg'); } 
+		#grid td.square.white { background-image: url('assets/white.jpg'); }
+		#grid td.square.move {  box-shadow: inset 0 0 3px 5px green; }
+		#grid td.square.attack { box-shadow: inset 0 0 3px 5px red; } 
+		
+		
+		#grid td div.piece { overflow: hidden ; font-size: 40px ; text-align: center ; cursor: pointer } 
+		#grid td div.piece.black { color: black ;}
+		#grid td div.piece.white { color: white ;}
+		#grid td div.piece.selected  { font-size: 50px ; }
+	</style>	
+	<script>
+		var game, player1, player2, basefield, statsfield ;
+		window.onload = function(){
+			function createGame(){
+				player1 = new Player($("#whiteName").val(), "white") ;
+				player2 = new Player($("#blackName").val(), "black") ;
+				
+				basefield = document.getElementById("grid") ;
+				statsfield = document.getElementById("stats") ;
+				
+				game = new Chess(player1, player2, basefield, statsfield) ;
+				
+				$(document).keydown(function(e){
+					if (e.keyCode == '9'){
+						$(basefield).toggleClass("rotate") ;
+						e.preventDefault() ;
+					}
+				}) ;
+			}
+			
+			document.getElementById("start").onclick = function(){
+				createGame() ;
+			} ;
+			createGame() ;
+		}
+	</script>
+	<script src="js/jQuery.js"></script>
+	<script src="js/classes.js"></script>
+	<script src="js/chess.js"></script>
+</head>
+<body>
+	<content>
+		<div id="controls">
+			<div id="rules">
+				<ul>
+					<li> Click "Start new game" </li>
+					<li> Select a piece to see its possible path </li>
+					<li> To destroy an enemy piece, click on its background</li>
+					<li> Press Tab to rotate the board </li>
+					<li> Author: <a href="https://github.com/azzipskcin"> Nick's Pizza </a></li>
+				</ul>
+			</div>
+			
+			<div id="create">
+				<table>
+					<tbody>
+						<tr>
+							<td>Player 1 (White)</td><td>Player 2 (Black)</td>
+						</tr>
+						<tr>
+							<td>
+								<input id="whiteName" placeholder="Name" type="text"/>
+							</td>
+							<td>
+								<input id="blackName" placeholder="Name" type="text"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center"><button id="start"> Start new game </button></td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+			
+			<div id="stats">
+				<table  id="stats" >
+					<tbody>
+					<tr>
+						<th>White</th><th>Black</th>
+					</tr>
+					<tr>
+						<td  class="loss white"></td><td  class="loss black"></td>
+					</tr>
+					<tr>
+						<td class="hasTurn white"></td><td class="hasTurn black"></td>
+					</tr>
+					<tr>
+						<td class="timeline" colspan="2"><textarea readonly="readonly" class="timeline"></textarea></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="field">
+			<table id="grid">
+
+			</table>
+		</div>
+	</content>
+</body>
+</html>
